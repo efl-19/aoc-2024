@@ -1,3 +1,6 @@
+from functools import reduce
+
+
 def is_safe(level: list[int]) -> bool:
     return (
         (
@@ -8,23 +11,16 @@ def is_safe(level: list[int]) -> bool:
     )
 
 
+def is_safe_enough(level: list[int]) -> bool:
+    return is_safe(level) or any(is_safe(level[:i] + level[i + 1:]) for i in range(len(level)))
+
+
 if __name__ == '__main__':
     with open('input/day2.txt', 'r') as input_data:
         levels = (
             [int(l) for l in report.strip().split(" ")]
             for report in input_data.readlines()
         )
-
-    safe_count_p1 = 0
-    safe_count_p2 = 0
-    for level in levels:
-        if is_safe(level):
-            safe_count_p1 += 1
-            safe_count_p2 += 1
-        else:
-            # brute force all level combinations
-            if any(is_safe(level[:i] + level[i+1:]) for i in range(len(level))):
-                safe_count_p2 += 1
-
-    print(safe_count_p1)
-    print(safe_count_p2)
+    
+    mapped = map(lambda level: (is_safe(level), is_safe_enough(level)), levels)
+    print(reduce(lambda count, safe: (count[0] + safe[0], count[1] + safe[1]), mapped, (0, 0)))
