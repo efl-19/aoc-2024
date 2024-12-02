@@ -22,12 +22,9 @@ if __name__ == '__main__':
             safe_count_p1 += 1
             safe_count_p2 += 1
         else:
-            for i in range(len(level)):  # brute force all level combinations
-                c_level = level.copy()
-                c_level.pop(i)
-                if is_safe(c_level):
-                    safe_count_p2 += 1
-                    break
+            # brute force all level combinations
+            if any(is_safe(level[:i] + level[i+1:]) for i in range(len(level))):
+                safe_count_p2 += 1
 
     print(safe_count_p1)
     print(safe_count_p2)
