@@ -15,8 +15,8 @@ def is_safe_enough(level: list[int]) -> bool:
     return is_safe(level) or any(is_safe(level[:i] + level[i + 1:]) for i in range(len(level)))
 
 
-def tuple_sum(t) -> tuple[int, int]:
-    return reduce(lambda count, safe: (count[0] + safe[0], count[1] + safe[1]), t, (0, 0))
+def tuple_sum(ts) -> tuple[int, int]:
+    return reduce(lambda acc, t: (acc[0] + t[0], acc[1] + t[1]), ts, (0, 0))
 
 
 if __name__ == '__main__':
