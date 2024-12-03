@@ -1,9 +1,9 @@
 from collections import Counter
 
 if __name__ == '__main__':
-    with open('input/day1.txt', 'r') as input_data:
+    with open('input/day1.txt', 'r') as xs:
         left, right = [], []
-        for line in input_data.readlines():
+        for line in xs.readlines():
             l, r = line.strip().split("   ")
             left.append(int(l))
             right.append(int(r))
