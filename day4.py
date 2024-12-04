@@ -1,33 +1,33 @@
-def find_word_count_in_grid(grid: list[str], word: str) -> int:
-    rows, cols = len(grid), len(grid[0])
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
+class Grid:
+    def __init__(self, grid: list[list[str]]):
+        self.grid = grid
+        self.column_count = len(self.grid[0])
+        self.row_count = len(self.grid)
 
-    def search(x: int, y: int):
-        c = 0
-        for dx, dy in directions:
-            valid = True
-            for i in range(1, len(word)):
-                nx, ny = x + dx * i, y + dy * i
-                if not (0 <= nx < rows and 0 <= ny < cols) or grid[nx][ny] != word[i]:
-                    valid = False
-                    break
-            if valid:
-                c += 1
-        return c
+    def _inbound(self, x: int, y: int):
+        return 0 <= x < self.row_count and 0 <= y < self.column_count
 
-    match_count = 0
-    for i in range(rows):
-        for j in range(cols):
-            if grid[i][j] == word[0]:
-                match_count += search(i, j)
+    def _search_from(self, x: int, y: int, word: str, direction: tuple[int, int]):
+        for i in range(len(word)):
+            nx, ny = x + direction[0] * i, y + direction[1] * i
+            if not self._inbound(nx, ny) or self.grid[nx][ny] != word[i]:
+                return False
+        return True
 
-    return match_count
+    def find_word_count(self, word: str) -> int:
+        count = 0
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, -1), (1, -1), (-1, 1)]
+        for i in range(self.row_count):
+            for j in range(self.column_count):
+                if self.grid[i][j] == word[0]:
+                    for direction in directions:
+                        if self._search_from(i, j, word, direction):
+                            count += 1
+        return count
 
-
-word = "XMAS"
 
 if __name__ == '__main__':
     with open('input/day4.txt', 'r') as xs:
-        grid = [line.strip() for line in xs.readlines()]
+        grid = Grid([list(line.strip()) for line in xs.readlines()])
 
-    print(find_word_count_in_grid(grid, word))
+    print(grid.find_word_count("XMAS"))
