@@ -1,5 +1,5 @@
-def matches(candidate: str, word):
-    return candidate == word or candidate[::-1] == word
+def is_word_cross(x1: str, x2: str, word: str) -> bool:
+    return (x1 == word or x1[::-1] == word) and (x2 == word or x2[::-1] == word)
 
 
 class Grid:
@@ -47,7 +47,7 @@ class Grid:
                     if top_left and bottom_right and top_right and bottom_left:
                         x1 = top_left + word[1] + bottom_right
                         x2 = top_right + word[1] + bottom_left
-                        if matches(x1, word) and matches(x2, word):
+                        if is_word_cross(x1, x2, word):
                             count += 1
 
         return count
