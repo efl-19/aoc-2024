@@ -4,15 +4,7 @@ ORDER_MAP: dict[int, list[int]] = {}
 
 
 def custom_cmp(a: int, b: int) -> int:
-    if not ORDER_MAP.get(a):
-        return 1
-
-    if b in ORDER_MAP[a]:
-        return -1
-
-    cmp = any(custom_cmp(bigger_than_a, b) for bigger_than_a in ORDER_MAP[a])
-    return 1 if cmp else -1
-
+    return -1 if b in ORDER_MAP[a] else 1
 
 if __name__ == '__main__':
     with open('input/day5.txt', 'r') as xs:
