@@ -6,6 +6,7 @@ ORDER_MAP: dict[int, list[int]] = {}
 def custom_cmp(a: int, b: int) -> int:
     return -1 if b in ORDER_MAP[a] else 1
 
+
 if __name__ == '__main__':
     with open('input/day5.txt', 'r') as xs:
         full_file = xs.read()
@@ -20,8 +21,8 @@ if __name__ == '__main__':
     for updates in updates:
         sorted_updates = sorted(updates, key=cmp_to_key(custom_cmp))
         if updates == sorted_updates:
-            sum_middles_sorted += updates[int((len(updates) - 1)/2)]
+            sum_middles_sorted += updates[int((len(updates) - 1) / 2)]
         else:
-            sum_middle_after_sort += sorted_updates[int((len(sorted_updates) - 1)/2)]
+            sum_middle_after_sort += sorted_updates[int((len(sorted_updates) - 1) / 2)]
 
     print(sum_middles_sorted, sum_middle_after_sort)
