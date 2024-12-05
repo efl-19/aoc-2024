@@ -18,11 +18,11 @@ if __name__ == '__main__':
         ORDER_MAP.setdefault(a, []).append(b)
 
     sum_middles_sorted, sum_middle_after_sort = 0, 0
-    for updates in updates:
-        sorted_updates = sorted(updates, key=cmp_to_key(custom_cmp))
-        if updates == sorted_updates:
-            sum_middles_sorted += updates[int((len(updates) - 1) / 2)]
+    for update in updates:
+        sorted_update = sorted(update, key=cmp_to_key(custom_cmp))
+        if update == sorted_update:
+            sum_middles_sorted += update[int((len(update) - 1) / 2)]
         else:
-            sum_middle_after_sort += sorted_updates[int((len(sorted_updates) - 1) / 2)]
+            sum_middle_after_sort += sorted_update[int((len(sorted_update) - 1) / 2)]
 
     print(sum_middles_sorted, sum_middle_after_sort)
