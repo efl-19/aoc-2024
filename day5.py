@@ -20,9 +20,9 @@ if __name__ == '__main__':
     sum_middles_sorted, sum_middle_after_sort = 0, 0
     for update in updates:
         sorted_update = sorted(update, key=cmp_to_key(custom_cmp))
-        if update == sorted_update:
+        if update == sorted_update:  # part 1
             sum_middles_sorted += update[int((len(update) - 1) / 2)]
-        else:
+        else:  # part 2
             sum_middle_after_sort += sorted_update[int((len(sorted_update) - 1) / 2)]
 
     print(sum_middles_sorted, sum_middle_after_sort)
