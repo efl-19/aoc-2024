@@ -59,7 +59,6 @@ class Grid:
                     self.grid[j][i] = "."
         return loop_count
 
-
     def pprint(self):
         for row in self.visited_grid:
             print("".join(row))
