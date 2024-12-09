@@ -12,6 +12,10 @@ def find_last_index(l: list[list[str]], element: list[str]) -> int:
     raise ValueError("Element not found in list")
 
 
+def checksum(blocks: list) -> int:
+    return sum(int(id) * i if id.isdigit() else 0 for i, id in enumerate(blocks))
+
+
 def part1(digits: list[int]) -> int:
     # build blocks
     id = 0
@@ -25,21 +29,16 @@ def part1(digits: list[int]) -> int:
             for _ in range(digit):
                 blocks.append(".")
 
-    # calculate checksum
+    # transform to final blocks position
     final_blocks = blocks.copy()
     free_space_indices = find_all_indices(final_blocks, lambda x: x == '.')
     digits_indices = find_all_indices(final_blocks, lambda x: x.isdigit())
-    for fs_i, d_i in zip(free_space_indices, reversed(digits_indices)):
-        if fs_i >= d_i:  # no more swaps needed
+    for free_space_i, digit_i in zip(free_space_indices, reversed(digits_indices)):
+        if free_space_i >= digit_i:  # no more swaps needed
             break
-        final_blocks[fs_i], final_blocks[d_i] = final_blocks[d_i], final_blocks[fs_i]  # swap
+        final_blocks[free_space_i], final_blocks[digit_i] = final_blocks[digit_i], final_blocks[free_space_i]  # swap
 
-    c_sum = 0
-    for i, id in enumerate(final_blocks):
-        if not id.isdigit():
-            break
-        c_sum += int(id) * i
-    return c_sum
+    return checksum(final_blocks)
 
 
 def part2(digits: list[int]) -> int:
@@ -53,29 +52,25 @@ def part2(digits: list[int]) -> int:
         elif digit != 0:  # free space
             blocks.append(["."] * digit)
 
-    # calculate checksum
+    # transform to final blocks position
     final_blocks = blocks.copy()
-    for block in reversed(blocks):
-        if block[0].isdigit():
-            for fi, f_block in enumerate(final_blocks):
-                if f_block[0] == '.' and len(f_block) >= len(block):  # possible swap
-                    li = find_last_index(final_blocks, block)
-                    if fi >= li:  # no more swaps needed
+    for right_block in reversed(blocks):
+        if right_block[0].isdigit():
+            for left_i, left_block in enumerate(final_blocks):
+                if left_block[0] == '.' and len(left_block) >= len(right_block):  # possible swap detected
+                    right_i = find_last_index(final_blocks, right_block)
+                    if left_i >= right_i:  # no more swaps needed
                         break
-                    if len(f_block) == len(block):  # simple swap
-                        final_blocks[fi], final_blocks[li] = final_blocks[li], final_blocks[fi]
-                    else:  # complex swap
-                        final_blocks[fi], final_blocks[li] = final_blocks[li], len(block) * ['.']
-                        remaining_dots = (len(f_block) - len(block)) * ['.']
-                        final_blocks.insert(fi + 1, remaining_dots)
+                    if len(left_block) == len(right_block):  # simple swap
+                        final_blocks[left_i], final_blocks[right_i] = final_blocks[right_i], final_blocks[left_i]
+                    else:  # complex swap with remaining free space
+                        final_blocks[left_i], final_blocks[right_i] = final_blocks[right_i], len(right_block) * ['.']
+                        remaining_dots = (len(left_block) - len(right_block)) * ['.']
+                        final_blocks.insert(left_i + 1, remaining_dots)
                     break
 
-    c_sum = 0
-    for i, id in enumerate(chain.from_iterable(final_blocks)):
-        if not id.isdigit():
-            continue
-        c_sum += int(id) * i
-    return c_sum
+    final_blocks = list(chain.from_iterable(final_blocks))
+    return checksum(final_blocks)
 
 
 if __name__ == '__main__':
