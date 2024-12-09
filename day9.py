@@ -12,7 +12,7 @@ def find_last_index(l: list[list[str]], element: list[str]) -> int:
     raise ValueError("Element not found in list")
 
 
-def checksum(blocks: list) -> int:
+def checksum(blocks: list[str]) -> int:
     return sum(int(id) * i if id.isdigit() else 0 for i, id in enumerate(blocks))
 
 
