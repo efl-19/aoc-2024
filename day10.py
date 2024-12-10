@@ -28,10 +28,13 @@ class Grid:
             if self.grid[j][i] == "0"
         ]
 
+    def _is_summit(self, x: int, y: int) -> bool:
+        return self.grid[y][x] == "9"
+
     def _trailhead_score(self, x: int, y: int) -> int:  # BFS for part 1
         visited = set()
         queue = deque([(x, y, 0)])
-        reachable_nines = set()
+        reachable_summits = set()
 
         while queue:
             cx, cy, height = queue.popleft()
@@ -39,15 +42,15 @@ class Grid:
                 continue
             visited.add((cx, cy))
 
-            if self.grid[cy][cx] == "9":
-                reachable_nines.add((cx, cy))
+            if self._is_summit(cx, cy):
+                reachable_summits.add((cx, cy))
 
             for nx, ny in self._neighbors(cx, cy):
                 next_candidate_height = self._height(nx, ny)
                 if next_candidate_height == height + 1:  # we can move
                     queue.append((nx, ny, next_candidate_height))
 
-        return len(reachable_nines)
+        return len(reachable_summits)
 
     def _trailhead_rating(self, x: int, y: int) -> int:  # DFS for part 2
         def dfs(cx: int, cy: int, height: int, visited: set[tuple[int, int]]) -> int:
@@ -55,12 +58,12 @@ class Grid:
                 return 0
             visited.add((cx, cy))
 
-            total_trails = 1 if self.grid[cy][cx] == "9" else 0
+            trails_to_summit_count = 1 if self._is_summit(cx, cy) else 0
             for nx, ny in self._neighbors(cx, cy):
                 if self._height(nx, ny) == height + 1:
-                    total_trails += dfs(nx, ny, height + 1, visited)
+                    trails_to_summit_count += dfs(nx, ny, height + 1, visited)
             visited.remove((cx, cy))
-            return total_trails
+            return trails_to_summit_count
 
         return dfs(x, y, 0, set())
 
