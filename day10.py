@@ -14,10 +14,11 @@ class Grid:
 
     def _neighbors(self, x: int, y: int):
         directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-        for dx, dy in directions:
-            nx, ny = x + dx, y + dy
-            if self._inbound(nx, ny):
-                yield nx, ny
+        return (
+            (nx, ny)
+            for dx, dy in directions
+            if self._inbound((nx := x + dx), (ny := y + dy))  # TIL
+        )
 
     def _starting_points(self) -> list[tuple[int, int]]:
         return [
@@ -27,7 +28,7 @@ class Grid:
             if self.grid[j][i] == "0"
         ]
 
-    def _trailhead_score(self, x: int, y: int) -> int:
+    def _trailhead_score(self, x: int, y: int) -> int:  # BFS for part 1
         visited = set()
         queue = deque([(x, y, 0)])
         reachable_nines = set()
@@ -48,18 +49,17 @@ class Grid:
 
         return len(reachable_nines)
 
-    def _trailhead_rating(self, x: int, y: int) -> int:
+    def _trailhead_rating(self, x: int, y: int) -> int:  # DFS for part 2
         def dfs(cx: int, cy: int, height: int, visited: set[tuple[int, int]]) -> int:
             if (cx, cy) in visited or self._height(cx, cy) != height:
                 return 0
             visited.add((cx, cy))
 
-            # Count as one trail ending here
             total_trails = 1 if self.grid[cy][cx] == "9" else 0
             for nx, ny in self._neighbors(cx, cy):
                 if self._height(nx, ny) == height + 1:
                     total_trails += dfs(nx, ny, height + 1, visited)
-            visited.remove((cx, cy))  # Backtrack
+            visited.remove((cx, cy))
             return total_trails
 
         return dfs(x, y, 0, set())
