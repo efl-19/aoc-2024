@@ -4,11 +4,11 @@ if __name__ == '__main__':
     with open('input/day8.txt', 'r') as xs:
         grid = [list(line.strip()) for line in xs.readlines()]
 
-    row_count = len(grid[0])
-    column_count = len(grid)
+    col_count = len(grid[0])
+    row_count = len(grid)
     grid_map = {}
-    for i in range(row_count):
-        for j in range(column_count):
+    for i in range(col_count):
+        for j in range(row_count):
             frequency = grid[j][i]
             if frequency.isalnum():
                 grid_map.setdefault(frequency, []).append((i, j))
@@ -23,20 +23,20 @@ if __name__ == '__main__':
             # part 1
             a1_x, a1_y = x1 - dx, y1 - dy
             a2_x, a2_y = x2 + dx, y2 + dy
-            if 0 <= a1_x < row_count and 0 <= a1_y < column_count and (a1_x, a1_y) not in antennas:
+            if 0 <= a1_x < col_count and 0 <= a1_y < row_count and (a1_x, a1_y) not in antennas:
                 antinodes_p1.add((a1_x, a1_y))
 
-            if 0 <= a2_x < row_count and 0 <= a2_y < column_count and (a2_x, a2_y) not in antennas:
+            if 0 <= a2_x < col_count and 0 <= a2_y < row_count and (a2_x, a2_y) not in antennas:
                 antinodes_p1.add((a2_x, a2_y))
 
             # part 2
             current_x, current_y = x1, y1
-            while 0 <= current_x < row_count and 0 <= current_y < column_count:
+            while 0 <= current_x < col_count and 0 <= current_y < row_count:
                 antinodes_p2.add((current_x, current_y))
                 current_x, current_y = current_x - dx, current_y - dy
 
             current_x, current_y = x1, y1
-            while 0 <= current_x < row_count and 0 <= current_y < column_count:
+            while 0 <= current_x < col_count and 0 <= current_y < row_count:
                 antinodes_p2.add((current_x, current_y))
                 current_x, current_y = current_x + dx, current_y + dy
 

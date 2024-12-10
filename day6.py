@@ -5,19 +5,19 @@ class Grid:
     def __init__(self, grid: list[list[str]]):
         self.grid = grid
         self.visited_grid = deepcopy(grid)
-        self.row_count = len(self.grid[0])
-        self.column_count = len(self.grid)
+        self.col_count = len(self.grid[0])
+        self.row_count = len(self.grid)
 
     def _inbound(self, x: int, y: int):
-        return 0 <= x < self.row_count and 0 <= y < self.column_count
+        return 0 <= x < self.col_count and 0 <= y < self.row_count
 
     def _neighbor(self, x: int, y: int, dx: int, dy: int) -> str | None:
         nx, ny = x + dx, y + dy
         return self.grid[ny][nx] if self._inbound(nx, ny) else None
 
     def _starting_point(self) -> tuple[int, int]:
-        for i in range(self.row_count):
-            for j in range(self.column_count):
+        for i in range(self.col_count):
+            for j in range(self.row_count):
                 if self.grid[j][i] == "^":
                     return i, j
         raise ValueError("No starting point found")
@@ -50,8 +50,8 @@ class Grid:
 
     def brute_force_loop_count(self):
         loop_count = 0
-        for i in range(self.row_count):
-            for j in range(self.column_count):
+        for i in range(self.col_count):
+            for j in range(self.row_count):
                 if self.grid[j][i] == ".":
                     self.grid[j][i] = "#"
                     if self.count_guard_path() == 0:
