@@ -6,8 +6,8 @@ if __name__ == '__main__':
             stones_count[stone] = stones_count.get(stone, 0) + 1
 
     for blink in range(1, 75 + 1):
-        previous_stones_count = stones_count.copy()
-        for stone, curr_count in previous_stones_count.items():
+        curr_stones_count = stones_count.copy()
+        for stone, curr_count in curr_stones_count.items():
             stones_count[stone] = stones_count.get(stone, 0) - curr_count  # remove the stones we will transform
             ss, len_ss = str(stone), len(str(stone))
             if stone == 0:
