@@ -40,13 +40,13 @@ class Grid:
             if self._inbound((nx := x + dx), (ny := y + dy))
         ]
 
-    def _perimeter(self, plot: Plot) -> int:
+    def _boundary_sides(self, plot: Plot) -> int:
         return 4 - len([n for n in self._neighbors(plot.x, plot.y) if n.v == plot.v])
 
-    def _build_regions(self) -> dict[int, list[Plot]]:
+    def _build_regions(self) -> list[list[Plot]]:
         region_id = 0
         assigned_plots: dict[Plot, int] = {}
-        # first pass
+        # first pass to assign regions
         for j in range(self.row_count):
             for i in range(self.col_count):
                 p = Plot(i, j, self.grid[j][i])
@@ -63,11 +63,10 @@ class Grid:
                         if not n in assigned_plots and n.v == p.v:
                             assigned_plots[n] = region_id
 
-        # merge regions
+        # merge regions when needed
         regions_to_merge: set[tuple[int, int]] = set()
         for p in assigned_plots:
-            neighbors = self._neighbors(p.x, p.y)
-            for n in neighbors:
+            for n in self._neighbors(p.x, p.y):
                 if n.v == p.v and n in assigned_plots and assigned_plots[n] != assigned_plots[p]:
                     regions_to_merge.add((assigned_plots[n], assigned_plots[p]))
 
@@ -84,14 +83,13 @@ class Grid:
                 regions[r1].extend(regions[r2])
                 del regions[r2]
 
-        return regions
+        return list(regions.values())
 
     def total_price(self) -> int:
-        regions = self._build_regions()
         t = 0
-        for _, plots in regions.items():
+        for plots in self._build_regions():
             area = len(plots)
-            perimeter = sum(self._perimeter(p) for p in plots)
+            perimeter = sum(self._boundary_sides(p) for p in plots)
             t += area * perimeter
         return t
 
