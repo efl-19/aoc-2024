@@ -4,10 +4,7 @@ from dataclasses import dataclass
 def group_pairs(pairs: set[tuple[int, int]]) -> list[set[int]]:
     groups = []
     for a, b in pairs:
-        found = []
-        for group in groups:
-            if a in group or b in group:
-                found.append(group)
+        found = [g for g in groups if a in g or b in g]
 
         if found:
             merged = set.union(*found, {a, b})
@@ -95,13 +92,8 @@ class Grid:
         for _, plots in regions.items():
             area = len(plots)
             perimeter = sum(self._perimeter(p) for p in plots)
-            print(plots[0].v, area, perimeter)
             t += area * perimeter
         return t
-
-    def pprint(self):
-        for row in self.grid:
-            print("".join(row))
 
 
 if __name__ == '__main__':
