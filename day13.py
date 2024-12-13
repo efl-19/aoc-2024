@@ -19,7 +19,7 @@ class Instruction:
         )
 
 
-def brute_force(instructions: list[Instruction]) -> int:  # part 1
+def brute_force(instructions: list[Instruction]) -> int:  # only works for part 1
     tokens_spent = 0
     for (ax, ay), (bx, by), (px, py) in map(astuple, instructions):
         min_cost = math.inf
@@ -29,16 +29,16 @@ def brute_force(instructions: list[Instruction]) -> int:  # part 1
                     min_cost = min(min_cost, 3 * a_press + b_press)
         if min_cost != math.inf:
             tokens_spent += min_cost
-            
+
     return tokens_spent
 
 
-def optimized(instructions: list[Instruction]) -> int:  # part 2
+def optimized(instructions: list[Instruction], prize_offset: int = 0) -> int:
     # Wizard maths I copied.. apparently called Cramer's rule (https://en.wikipedia.org/wiki/Cramer%27s_rule)
     tokens_spent = 0
     for (ax, ay), (bx, by), (px, py) in map(astuple, instructions):
-        px += 10000000000000
-        py += 10000000000000
+        px += prize_offset
+        py += prize_offset
         a_press = (px * by - bx * py) / (ax * by - bx * ay)
         b_press = (px * ay - ax * py) / (bx * ay - ax * by)
         if a_press == int(a_press) and b_press == int(b_press):
@@ -51,4 +51,5 @@ if __name__ == '__main__':
         instructions = list(map(Instruction.parse, xs.read().split("\n\n")))
 
     print(brute_force(instructions))  # part 1
-    print(optimized(instructions))  # part 2
+    print(optimized(instructions))  # part 1 optimized
+    print(optimized(instructions, prize_offset=10**13))  # part 2
