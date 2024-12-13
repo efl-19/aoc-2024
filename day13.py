@@ -29,6 +29,7 @@ def brute_force(instructions: list[Instruction]) -> int:  # part 1
                     min_cost = min(min_cost, 3 * a_press + b_press)
         if min_cost != math.inf:
             tokens_spent += min_cost
+            
     return tokens_spent
 
 
@@ -40,7 +41,6 @@ def optimized(instructions: list[Instruction]) -> int:  # part 2
         py += 10000000000000
         a_press = (px * by - bx * py) / (ax * by - bx * ay)
         b_press = (px * ay - ax * py) / (bx * ay - ax * by)
-
         if a_press == int(a_press) and b_press == int(b_press):
             tokens_spent += int(a_press * 3 + b_press)
 
