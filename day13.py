@@ -42,7 +42,7 @@ def optimized(instructions: list[Instruction], prize_offset: int = 0) -> int:
         a_press = (px * by - bx * py) / (ax * by - bx * ay)
         b_press = (px * ay - ax * py) / (bx * ay - ax * by)
         if a_press == int(a_press) and b_press == int(b_press):
-            tokens_spent += int(a_press * 3 + b_press)
+            tokens_spent += int(3 * a_press + b_press)
 
     return tokens_spent
 
