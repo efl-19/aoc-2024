@@ -1,4 +1,3 @@
-import math
 import re
 from collections import Counter
 from dataclasses import dataclass
@@ -60,16 +59,15 @@ if __name__ == '__main__':
 
     grid = Grid(robots, row_count=103, col_count=101)
     grid.move(seconds=100)
-    print(grid.safety_factor())  # part 1
+    sf_p1 = grid.safety_factor()
 
-    min_safety_factor = math.inf
-    min_safety_factor_second = 0
+    min_safety_factor, min_safety_factor_second = sf_p1, 0
     for second in range(101, 10000):
-        grid.move(seconds=1)
+        grid.move()
         sf = grid.safety_factor()
         if sf < min_safety_factor:
-            min_safety_factor = sf
-            min_safety_factor_second = second
+            min_safety_factor, min_safety_factor_second = sf, second
             grid.pprint()
 
+    print(sf_p1)  # part 1
     print(min_safety_factor_second)  # part 2
