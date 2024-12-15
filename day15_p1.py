@@ -45,13 +45,13 @@ class Grid:
         return sum(x + 100 * y for x, y in self.boxes)
 
     def pprint(self):
-        for i in range(self.col_count):
-            for j in range(self.row_count):
-                if (j, i) == self.robot:
+        for j in range(self.row_count):
+            for i in range(self.col_count):
+                if (i, j) == self.robot:
                     print('@', end='')
-                elif (j, i) in self.boxes:
+                elif (i, j) in self.boxes:
                     print('O', end='')
-                elif (j, i) in self.walls:
+                elif (i, j) in self.walls:
                     print('#', end='')
                 else:
                     print('.', end='')
@@ -59,7 +59,7 @@ class Grid:
 
 
 if __name__ == '__main__':
-    with open('input/day15.txt', 'r') as xs:
+    with open('input/day15_sample.txt', 'r') as xs:
         w_map, r_instructions = xs.read().split("\n\n")
         w_grid = Grid([list(line) for line in w_map.split("\n")])
         r_directions = [
